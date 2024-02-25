@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundraising Progress Tracker</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+           
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        button.btn-primary {
+            width: 100%;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button.btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .card {
+            margin-top: 20px;
+            border: none;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+        .card-body {
+            padding: 20px;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .btn-copy {
+            margin-top: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style=" color: rgba(216, 17, 17, 0.801); font-size: 60px;">SIO </h1>
+        <h2 style="color: rgb(12, 12, 12);">santhapuram </h2>
+        
+        <div class="row justify-content-center" style="margin-top: 100px;">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label for="unitAmount">Select Unit:</label>
+                    <select id="unitAmount" class="form-control">
+                        <option value="15000">പൂളമണ്ണ</option>
+                        <option value="20000">ശാന്തപുരം നോർത്ത്</option>
+                        <option value="25000">മുള്യാകാർശി</option>
+                        <option value="20000">പള്ളിക്കുത്ത്</option>
+                        <option value="25000">ഒലിപ്പുഴ</option>
+                        <option value="10000">വലിയപ്പറമ്പ്</option>
+                        <option value="30000">കാഞ്ഞിരപ്പളളി</option>
+                        <option value="35000">പാണ്ടിക്കാട്</option>
+                        <option value="10000">ചെമ്മാണിയോട്</option>
+                        <option value="30000">ചന്തപ്പടി (മേലാറ്റൂർ)</option>
+                        <option value="25000">ചുങ്കം</option>
+                        <option value="15000">ചിറക്കൽ</option>
+                        <option value="10000">വേങ്ങൂർ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="collatedAmount">Total Collated Amount:</label>
+                    <input type="number" id="collatedAmount" class="form-control">
+                </div>
+                <button onclick="calculate()" class="btn btn-primary btn-block">Calculate</button>
+            </div>
+        </div>
+        <div class="card mt-4">
+            <div class="card-body" id="output"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            var unitName = document.getElementById('unitAmount').options[document.getElementById('unitAmount').selectedIndex].text;
+            var collatedAmount = parseFloat(document.getElementById('collatedAmount').value);
+            var unitAmount = parseFloat(document.getElementById('unitAmount').value);
+            var unitAmount15Percent = collatedAmount * 0.15;
+            var percentage = (collatedAmount / unitAmount) * 100;
+
+            var outputText = "<p>Selected Unit: " + unitName + "</p>";
+            outputText += "<p>Collated Amount: ₹" + collatedAmount.toFixed(2) + "</p>";
+            outputText += "<p>Unit Amount (15%): ₹" + unitAmount15Percent.toFixed(2) + "</p>";
+            outputText += "<p>Fundraising Progress: " + percentage.toFixed(2) + "%</p>";
+
+            if (collatedAmount >= unitAmount) {
+                outputText += "<p>Congratulations! You've reached your target amount.</p>";
+            } else {
+                var remainingAmount = unitAmount - collatedAmount;
+                outputText += "<p>You need ₹" + remainingAmount.toFixed(2) + " more to reach your target amount.</p>";
+            }
+            
+            outputText += '<button onclick="copyOutput()" class="btn btn-primary btn-copy"><i class="far fa-copy"></i> Copy</button>';
+
+            document.getElementById('output').innerHTML = outputText;
+        }
+
+        function copyOutput() {
+            var outputText = document.getElementById('output').innerText;
+            navigator.clipboard.writeText(outputText);
+            alert("Output text copied to clipboard!");
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
