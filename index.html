@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIO Pandikkad</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Splash Screen */
+        #splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: bold;
+            animation: fadeOut 2s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+
+        /* Main Container */
+        body {
+            background: #000;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            margin: 20px;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+            display: none; /* Hidden initially */
+        }
+        h1 {
+            color: #fff;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #ccc;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #444;
+            padding: 12px;
+            font-size: 16px;
+            background: #333;
+            color: #fff;
+        }
+        .form-control:focus {
+            border-color: #666;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        .btn-primary {
+            width: 100%;
+            background: #444;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: #666;
+        }
+        .card {
+            margin-top: 20px;
+            border: none;
+            border-radius: 15px;
+            background: #333;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-body p {
+            margin: 10px 0;
+            font-size: 14px;
+            color: #ccc;
+        }
+        .btn-copy {
+            margin-top: 15px;
+            width: 100%;
+            background: #666;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .btn-copy:hover {
+            background: #888;
+        }
+        .alert {
+            margin-top: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 14px;
+            background: #444;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splash">
+        SIO Pandikkad
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h1>SIO</h1>
+        <h2>Pandikkad</h2>
+
+        <!-- Unit Selection -->
+        <div class="form-group">
+            <label for="unitAmount">Select Unit:</label>
+            <select id="unitAmount" class="form-control">
+                <option value="30000">Olipuzha</option>
+                <option value="32000">Pandikkad</option>
+                <option value="30000">Melattur</option>
+                <option value="12000">CHEMMANIYODE</option>
+                <option value="12000">Vengoor</option>
+                <option value="12000">Poolamanna</option>
+            </select>
+        </div>
+
+        <!-- Amount Inputs -->
+        <div class="form-group">
+            <label for="collatedAmount">Total Collected Amount:</label>
+            <input type="number" id="collatedAmount" class="form-control" placeholder="Enter total amount">
+        </div>
+        <div class="form-group">
+            <label for="TodaycollatedAmount">Today Collected Amount:</label>
+            <input type="number" id="TodaycollatedAmount" class="form-control" placeholder="Enter today's amount">
+        </div>
+
+        <!-- Calculate Button -->
+        <button onclick="calculate()" class="btn btn-primary">Calculate</button>
+
+        <!-- Results Card -->
+        <div class="card mt-4">
+            <div class="card-body" id="output">
+                <!-- Results will be displayed here -->
+            </div>
+        </div>
+
+        <!-- Copy Button -->
+        <button onclick="copyOutput()" class="btn-copy">Copy Results <i class="fas fa-copy"></i></button>
+    </div>
+
+    <script>
+        // Show splash screen for 2 seconds, then display the main container
+        setTimeout(() => {
+            document.getElementById('splash').style.display = 'none';
+            document.querySelector('.container').style.display = 'block';
+        }, 2000);
+
+        function calculate() {
+            const collatedAmount = parseFloat(document.getElementById('collatedAmount').value);
+            const todayCollatedAmount = parseFloat(document.getElementById('TodaycollatedAmount').value);
+            const unitDropdown = document.getElementById('unitAmount');
+            const unitName = unitDropdown.options[unitDropdown.selectedIndex].text;
+            const unitAmount = parseFloat(unitDropdown.value);
+
+            if (isNaN(collatedAmount)) {
+                alert("Please enter a valid total collected amount.");
+                return;
+            }
+
+            if (collatedAmount < todayCollatedAmount) {
+                alert("Today's collected amount cannot be greater than the total collected amount.");
+                return;
+            }
+
+            const unitAmount15Percent = collatedAmount * 0.15;
+            const percentage = (collatedAmount / unitAmount) * 100;
+            const todayPercentage = (todayCollatedAmount / unitAmount) * 100;
+            const remainingAmount = unitAmount - collatedAmount;
+
+            let outputText = `
+                <p><strong>${unitName}:</strong> ₹${unitAmount.toFixed(2)}</p>
+                <p><strong>Total Collected:</strong> ₹${collatedAmount.toFixed(2)}</p>
+                <p><strong>Today Collected:</strong> ₹${todayCollatedAmount.toFixed(2)}</p>
+                <p><strong>15% of Total:</strong> ₹${unitAmount15Percent.toFixed(2)}</p>
+                <p><strong>Progress:</strong> ${percentage.toFixed(2)}%</p>
+                <p><strong>Today's Progress:</strong> ${todayPercentage.toFixed(2)}%</p>
+            `;
+
+            if (collatedAmount >= unitAmount) {
+                outputText += `<p class="text-success"><strong>Mashallah! Target achieved.</strong></p>`;
+            } else {
+                outputText += `<p class="text-warning"><strong>Remaining:</strong> ₹${remainingAmount.toFixed(2)}</p>`;
+            }
+
+            document.getElementById('output').innerHTML = outputText;
+        }
+
+        function copyOutput() {
+            const outputText = document.getElementById('output').innerText;
+            navigator.clipboard.writeText(outputText);
+            alert("Results copied to clipboard!");
+        }
+    </script>
+</body>
+</html>
